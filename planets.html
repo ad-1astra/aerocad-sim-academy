@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Planet Hopper</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=B612+Mono&family=Chakra+Petch:wght@500;700&display=swap">
+<link rel="stylesheet" href="css/academy.css">
+<style>
+  .choices {
+    position: absolute; z-index: 16; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%);
+    width: min(680px, calc(100% - 24px)); padding: 12px 14px; display: flex; flex-direction: column; gap: 8px;
+  }
+  .choices .q { font-family: var(--f-display); font-weight: 700; font-size: 1.08rem; text-align: center; }
+  .choices .q small { display: block; font-family: var(--f-hud); font-weight: 400; font-size: 0.68rem; letter-spacing: 0.12em; color: var(--magenta); text-transform: uppercase; }
+  .choices .opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 6px; }
+  .choices .opts button { min-height: 44px; border-radius: 8px; border: 1px solid var(--line); background: var(--raised); cursor: pointer; font-size: 0.86rem; padding: 6px 8px; line-height: 1.2; }
+  .choices .opts button small { display: block; font-family: var(--f-hud); color: var(--dim); font-size: 0.66rem; }
+  .choices .opts button:hover { border-color: var(--cyan); }
+  .choices .opts button.on { border-color: var(--cyan); color: var(--cyan); }
+  .choices .opts button.right { border-color: var(--green); background: rgba(75, 227, 138, 0.15); }
+  .choices .opts button.wrong { border-color: var(--red); background: rgba(255, 90, 79, 0.15); }
+  .pcard { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 10px; font-family: var(--f-hud); font-size: 0.74rem; }
+  .pcard span:nth-child(odd) { color: var(--dim); }
+</style>
+</head>
+<body>
+<main class="game"><div id="stage"></div></main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>window.THREE || document.write('<script src="lib/three.min.js"><\/script>')</script>
+<script src="js/core.js"></script>
+<script src="js/models.js"></script>
+<script src="js/questions.js"></script>
+<script src="js/planets.js"></script>
+</body>
+</html>

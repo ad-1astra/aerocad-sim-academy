@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AeroCAD Sim Academy</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=B612+Mono&family=Chakra+Petch:wght@500;700&display=swap">
+<link rel="stylesheet" href="css/academy.css">
+<style>
+  /* Hub: cockpit-night world. Hero with a live 3D scene, pilot cards, then the 8-week course map. */
+  body { overflow-x: hidden; }
+  .hub { max-width: 1180px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0 48px; }
+  .brand { display: flex; align-items: center; gap: 12px; padding-block: 18px; flex-wrap: wrap; }
+  .brand .word { font-family: var(--f-display); font-weight: 700; font-size: 1.35rem; letter-spacing: 0.04em; }
+  .brand .word span { color: var(--rbf); }
+  .rbf { background: var(--rbf); color: #fff; font-family: var(--f-hud); font-size: 0.66rem; letter-spacing: 0.16em; padding: 4px 10px 4px 14px; border-radius: 2px; position: relative; text-transform: uppercase; }
+  .rbf::before { content: ""; position: absolute; left: 4px; top: 50%; width: 5px; height: 5px; margin-top: -2.5px; border-radius: 50%; background: var(--bg); }
+  .brand .grow { flex: 1; }
+  .brand a.ac-btn { white-space: nowrap; }
+  .hero { position: relative; border-radius: 16px; overflow: hidden; border: 1px solid var(--line); min-height: 380px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); background: radial-gradient(120% 120% at 80% 30%, #12284a 0%, var(--bg) 60%); }
+  #stage { position: absolute; inset: 0; }
+  .hero .copy { position: relative; z-index: 2; padding: 34px 32px; display: flex; flex-direction: column; gap: 14px; justify-content: center; }
+  .hero h1 { font-size: clamp(2rem, 4.6vw, 3.4rem); line-height: 1.02; }
+  .hero h1 em { font-style: normal; color: var(--cyan); }
+  .hero p { color: var(--dim); max-width: 46ch; font-size: 1.05rem; }
+  .hero .cta { display: flex; gap: 10px; flex-wrap: wrap; }
+  .hero .hud-chip { font-family: var(--f-hud); font-size: 0.72rem; color: var(--green); letter-spacing: 0.08em; }
+  section { margin-top: 34px; }
+  .sec-h { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+  .sec-h h2 { font-size: 1.5rem; }
+  .sec-h p { color: var(--dim); font-size: 0.92rem; }
+  .pilots { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+  .pilot { border: 1px solid var(--line); border-radius: 12px; padding: 14px; background: var(--panel-solid); display: flex; flex-direction: column; gap: 8px; cursor: pointer; }
+  .pilot.on { border-color: var(--cyan); box-shadow: 0 0 0 1px var(--cyan) inset; }
+  .pilot input { background: transparent; border: 0; border-bottom: 1px dashed var(--line); color: var(--fg); font: 700 1.15rem var(--f-display); width: 100%; padding: 2px 0; }
+  .pilot input:focus { outline: none; border-bottom-color: var(--cyan); }
+  .pilot .stats { display: flex; gap: 14px; font-family: var(--f-hud); font-size: 0.8rem; color: var(--dim); }
+  .pilot .stats b { color: var(--fg); font-weight: 400; }
+  .pilot .act { font-family: var(--f-hud); font-size: 0.7rem; letter-spacing: 0.1em; color: var(--cyan); text-transform: uppercase; }
+  .pilot.add { align-items: center; justify-content: center; color: var(--dim); border-style: dashed; min-height: 110px; background: transparent; }
+  .weeks { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 14px; }
+  .wk { border: 1px solid var(--line); border-radius: 14px; background: var(--panel-solid); padding: 16px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+  .wk.now { border-color: var(--magenta); box-shadow: 0 0 0 1px var(--magenta) inset; }
+  .wk .top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .wk .num { font-family: var(--f-hud); font-size: 0.7rem; letter-spacing: 0.08em; color: var(--dim); text-transform: uppercase; min-width: 0; }
+  .wk .pill { font-family: var(--f-hud); font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; border: 1px solid currentColor; white-space: nowrap; flex: none; }
+  .pill.now { color: var(--magenta); } .pill.past { color: var(--amber); } .pill.next { color: var(--dim); } .pill.done { color: var(--green); }
+  .wk h3 { font-size: 1.15rem; }
+  .wk .idea { color: var(--dim); font-size: 0.9rem; }
+  .wk .games { display: flex; flex-direction: column; gap: 6px; }
+  .wk .g { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; align-items: center; text-decoration: none; color: var(--fg); background: var(--raised); border-radius: 8px; padding: 8px 10px; border: 1px solid transparent; }
+  .wk .g:hover { border-color: var(--cyan); }
+  .wk .g b { font-family: var(--f-display); font-size: 0.98rem; color: var(--cyan); }
+  .wk .g .st { font-size: 0.8rem; color: var(--amber); letter-spacing: -1px; }
+  .wk .g .st i { color: var(--line); font-style: normal; }
+  .wk .g small { grid-column: 1 / -1; color: var(--dim); font-size: 0.8rem; }
+  .wk .test { font-family: var(--f-hud); font-size: 0.8rem; color: var(--magenta); text-decoration: none; display: inline-flex; gap: 6px; align-items: center; }
+  .wk .test:hover { text-decoration: underline; }
+  .extras { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+  .xcard { border: 1px solid var(--line); border-radius: 14px; padding: 18px; text-decoration: none; color: var(--fg); background: var(--panel-solid); display: flex; flex-direction: column; gap: 6px; }
+  .xcard:hover { border-color: var(--cyan); }
+  .xcard .k { font-family: var(--f-hud); font-size: 0.7rem; color: var(--dim); letter-spacing: 0.12em; text-transform: uppercase; }
+  .xcard b { font-family: var(--f-display); font-size: 1.25rem; color: var(--cyan); }
+  .xcard p { color: var(--dim); font-size: 0.9rem; }
+  .xcard.teacher { border-color: var(--rbf); }
+  .xcard.teacher b { color: var(--fg); }
+  footer { margin-top: 40px; color: var(--dim); font-size: 0.85rem; border-top: 1px solid var(--line); padding-top: 16px; display: flex; flex-wrap: wrap; gap: 8px 20px; justify-content: space-between; }
+  .reset { background: none; border: 0; color: var(--dim); text-decoration: underline; cursor: pointer; font-size: 0.85rem; }
+  @media (max-width: 760px) {
+    .hero { grid-template-columns: 1fr; min-height: 520px; }
+    .hero .copy { padding: 22px 18px; justify-content: flex-start; }
+    #stage { top: 240px; }
+  }
+</style>
+</head>
+<body>
+<div class="hub">
+  <header class="brand">
+    <span class="word">AeRo<span>CAD</span> Sim Academy</span>
+    <span class="rbf">Innovators · Ages 13–18</span>
+    <span class="grow"></span>
+    <a class="ac-btn ghost small" href="teacher.html">Teacher guide</a>
+  </header>
+
+  <div class="hero">
+    <div id="stage" aria-hidden="true"></div>
+    <div class="copy">
+      <span class="hud-chip">◆ 9 GAMES · 37 MISSIONS · TESTS YOU PLAY</span>
+      <h1>Learn the theory by <em>flying it.</em></h1>
+      <p>Every lesson from the AeRoCAD bootcamp handouts, as a 3D game. Balance the four forces, mix quadcopter motors, launch PearlAfricaSat-1 into orbit, then prove it in the Test Arena.</p>
+      <div class="cta">
+        <a class="ac-btn" id="go-now" href="quad.html">Play this week</a>
+        <a class="ac-btn ghost" href="arena.html#w4">Quiz Duel</a>
+      </div>
+    </div>
+  </div>
+
+  <section aria-labelledby="pilots-h">
+    <div class="sec-h"><h2 id="pilots-h">Pilots</h2><p>Tap a pilot to fly as them. Stars and XP are saved in this browser.</p></div>
+    <div class="pilots" id="pilots"></div>
+  </section>
+
+  <section aria-labelledby="map-h">
+    <div class="sec-h"><h2 id="map-h">Course map</h2><p>National ICT Innovation Hub, Nakawa · Saturdays 9:00 am – 1:00 pm</p></div>
+    <div class="weeks" id="weeks"></div>
+  </section>
+
+  <section aria-labelledby="more-h">
+    <div class="sec-h"><h2 id="more-h">More</h2></div>
+    <div class="extras">
+      <a class="xcard" href="code.html"><span class="k">TinkerCAD Codeblocks</span><b>Code Pilot</b><p>Program a drone with blocks, then write code that builds a quad frame and rocket fins on a TinkerCAD-style workplane.</p><span class="st" id="code-stars"></span></a>
+      <a class="xcard" href="arena.html#all"><span class="k">Tests</span><b>Test Arena</b><p>Gate Runner for one pilot, Quiz Duel for two on one keyboard. 100+ questions from every handout.</p></a>
+      <a class="xcard teacher" href="teacher.html"><span class="k">For the instructor</span><b>Teacher guide</b><p>What to say, when to pause, answers to every Quick check, a Week 4 catch-up plan and TinkerCAD tasks.</p></a>
+    </div>
+  </section>
+
+  <footer>
+    <span>Every model is built from TinkerCAD basic shapes: box, cylinder, cone, sphere, torus and wedge.</span>
+    <button class="reset" type="button" id="reset">Reset all progress…</button>
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>window.THREE || document.write('<script src="lib/three.min.js"><\/script>')</script>
+<script src="js/core.js"></script>
+<script src="js/models.js"></script>
+<script src="js/hub.js"></script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Orbit Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=B612+Mono&family=Chakra+Petch:wght@500;700&display=swap">
+<link rel="stylesheet" href="css/academy.css">
+<style>
+  .fire { display: grid; grid-template-columns: auto 1fr auto; gap: 6px; align-items: center; margin: 4px 0; }
+  .fire input[type="number"] { width: 100%; min-height: 38px; border-radius: 8px; border: 1px solid var(--line); background: var(--raised); color: var(--fg); font: 1.05rem var(--f-hud); text-align: center; }
+  .fire button { min-width: 40px; min-height: 38px; border-radius: 8px; border: 1px solid var(--line); background: var(--raised); cursor: pointer; font-family: var(--f-hud); }
+  .shots { display: flex; flex-direction: column; gap: 3px; font-family: var(--f-hud); font-size: 0.72rem; margin-top: 4px; }
+  .shots div { background: var(--raised); border-radius: 6px; padding: 4px 6px; }
+  .otab { width: 100%; border-collapse: collapse; font-family: var(--f-hud); font-size: 0.72rem; font-variant-numeric: tabular-nums; }
+  .otab th { color: var(--dim); font-weight: 400; text-align: right; padding: 2px; border-bottom: 1px solid var(--line); }
+  .otab td { text-align: right; padding: 3px 2px; }
+  .otab th:first-child, .otab td:first-child { text-align: left; }
+</style>
+</head>
+<body>
+<main class="game"><div id="stage"></div></main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>window.THREE || document.write('<script src="lib/three.min.js"><\/script>')</script>
+<script src="js/core.js"></script>
+<script src="js/models.js"></script>
+<script src="js/questions.js"></script>
+<script src="js/orbit.js"></script>
+</body>
+</html>

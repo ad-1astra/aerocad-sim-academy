@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sim Academy Teacher Guide</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=B612+Mono&family=Chakra+Petch:wght@600;700&display=swap">
+<style>
+  /* Instructor's field manual: one readable column, a sticky contents rail on wide screens. */
+  :root {
+    --bg: #f6f7f9; --paper: #ffffff; --fg: #17202b; --dim: #5b6878; --line: #dfe3ea; --accent: #0f6fa8; --rbf: #d7261e;
+    --ok: #157a46; --warn: #a35a00; --code-bg: #eef2f7; --mark: #fff3c4;
+    --f-display: "Chakra Petch", "Segoe UI", system-ui, sans-serif;
+    --f-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+    --f-mono: "B612 Mono", ui-monospace, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #0b1422; --paper: #101c2e; --fg: #e6edf5; --dim: #97a8bd; --line: #24384f; --accent: #5cc8ee; --rbf: #ff5a4f; --ok: #4be38a; --warn: #ffb547; --code-bg: #15273d; --mark: #3a3216; color-scheme: dark; } }
+  :root[data-theme="dark"] { --bg: #0b1422; --paper: #101c2e; --fg: #e6edf5; --dim: #97a8bd; --line: #24384f; --accent: #5cc8ee; --rbf: #ff5a4f; --ok: #4be38a; --warn: #ffb547; --code-bg: #15273d; --mark: #3a3216; color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 17px/1.62 var(--f-body); }
+  a { color: var(--accent); }
+  .wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0 64px; display: grid; grid-template-columns: 230px minmax(0, 1fr); gap: 40px; }
+  header.top { grid-column: 1 / -1; padding-block: 28px 8px; border-bottom: 3px solid var(--fg); display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px 20px; }
+  header.top .tag { background: var(--rbf); color: #fff; font: 0.68rem var(--f-mono); letter-spacing: 0.16em; padding: 4px 10px; text-transform: uppercase; }
+  h1, h2, h3, h4 { font-family: var(--f-display); line-height: 1.15; text-wrap: balance; }
+  h1 { font-size: clamp(2rem, 5vw, 3rem); margin: 6px 0 0; flex-basis: 100%; }
+  header.top p { margin: 0 0 6px; color: var(--dim); max-width: 60ch; }
+  header.top .back { margin-left: auto; font: 0.85rem var(--f-mono); }
+  nav.toc { position: sticky; top: 16px; align-self: start; font-size: 0.9rem; padding-top: 24px; }
+  nav.toc b { font: 0.7rem var(--f-mono); letter-spacing: 0.14em; color: var(--dim); text-transform: uppercase; display: block; margin-bottom: 8px; }
+  nav.toc ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+  nav.toc a { text-decoration: none; color: var(--fg); }
+  nav.toc a:hover { color: var(--accent); }
+  main { min-width: 0; padding-top: 12px; }
+  main > section { padding-top: 26px; border-top: 1px solid var(--line); margin-top: 26px; }
+  main > section:first-child { border-top: 0; margin-top: 0; }
+  h2 { font-size: 1.75rem; margin: 0 0 10px; }
+  h2 .no { font: 0.8rem var(--f-mono); color: var(--rbf); display: block; letter-spacing: 0.12em; margin-bottom: 4px; }
+  h3 { font-size: 1.25rem; margin: 26px 0 8px; }
+  h4 { font-size: 1.02rem; margin: 18px 0 6px; }
+  p, li { max-width: 68ch; }
+  .lead { font-size: 1.12rem; }
+  .say { border-left: 4px solid var(--accent); background: var(--paper); padding: 10px 14px; margin: 12px 0; border-radius: 0 8px 8px 0; }
+  .say b { font: 0.7rem var(--f-mono); letter-spacing: 0.12em; color: var(--accent); text-transform: uppercase; display: block; }
+  .warn { border-left-color: var(--warn); } .warn b { color: var(--warn); }
+  .f { font-family: var(--f-mono); font-size: 0.92rem; background: var(--code-bg); padding: 1px 6px; border-radius: 4px; white-space: nowrap; }
+  .tbl { overflow-x: auto; margin: 12px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.93rem; background: var(--paper); }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font: 0.72rem var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--dim); }
+  td.t { font-family: var(--f-mono); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .week { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 16px 20px; margin: 18px 0; }
+  .week h3 { margin-top: 4px; }
+  .week .meta { font: 0.78rem var(--f-mono); color: var(--dim); letter-spacing: 0.06em; }
+  .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 4px 28px; }
+  ol.ans li, ul.ans li { margin: 4px 0; }
+  .blocks { font-family: var(--f-mono); font-size: 0.88rem; background: var(--code-bg); border-radius: 8px; padding: 12px 14px; overflow-x: auto; white-space: pre; line-height: 1.55; }
+  .game-link { font: 0.82rem var(--f-mono); }
+  mark { background: var(--mark); color: inherit; padding: 0 2px; }
+  @media (max-width: 860px) { .wrap { grid-template-columns: 1fr; } nav.toc { position: static; padding-top: 8px; } nav.toc ol { flex-direction: row; flex-wrap: wrap; gap: 6px 14px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <span class="tag">For the instructor</span>
+    <a class="back" href="index.html">← Back to the Sim Academy</a>
+    <h1>Teacher Guide</h1>
+    <p>How to teach the AeRoCAD aerospace theory to Innovators (13–18) through games: what to say, when to pause, what to ask, and the answers.</p>
+  </header>
+
+  <nav class="toc" aria-label="Contents">
+    <b>Contents</b>
+    <ol>
+      <li><a href="#start">1 · Start here</a></li>
+      <li><a href="#loop">2 · The teaching loop</a></li>
+      <li><a href="#saturday">3 · This Saturday (Week 4)</a></li>
+      <li><a href="#primer">4 · Theory refresher for you</a></li>
+      <li><a href="#weeks">5 · Week by week + answers</a></li>
+      <li><a href="#codeblocks">6 · TinkerCAD &amp; Codeblocks</a></li>
+      <li><a href="#tests">7 · Running the tests</a></li>
+      <li><a href="#help">8 · If something goes wrong</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <section id="start">
+      <h2><span class="no">01</span>Start here</h2>
+      <p class="lead">Your students are on holiday and don't want lectures. So don't open with theory. <mark>Let them play first, then name what they just saw.</mark> Every game was built from your eight handouts, so the numbers, formulas and examples match what is printed on their sheets.</p>
+      <h3>What is in the Sim Academy</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>Game</th><th>Week</th><th>What they do</th></tr></thead>
+        <tbody>
+          <tr><td><a href="sky.html">Sky School</a></td><td class="t">1 · 2 · 3</td><td>Fly a Cessna-sized aircraft at Entebbe with live lift, weight, thrust and drag arrows. Balance forces, take off, stall it on purpose, fly rings, land.</td></tr>
+          <tr><td><a href="stability.html">Stability Hangar</a></td><td class="t">3</td><td>Balance a model on a pivot (moments, CG), fix a drone's CG, wind-tunnel static-margin test, control-surface drill, night navigation lights.</td></tr>
+          <tr><td><a href="quad.html">Quad Pilot</a></td><td class="t">4</td><td>Motor test stand puzzles (mixing), hover with manual throttle, ring run, medicine delivery to an island in Lake Victoria, drone design review with T/W and flight time.</td></tr>
+          <tr><td><a href="structures.html">Strong &amp; Light</a></td><td class="t">5</td><td>Design a drone arm (bending stress, factor of safety, stiffness), brace a truss tower, compare materials by density.</td></tr>
+          <tr><td><a href="autopilot.html">Autopilot Lab</a></td><td class="t">6</td><td>Tune the exact PID altitude-hold from the Week 6 Python lab with a live graph; GPS fixes over a map of Uganda.</td></tr>
+          <tr><td><a href="rocket.html">Launch Pad</a></td><td class="t">7</td><td>Build rockets from tanks and engines. T/W, atmosphere layers, Max Q, staging, gravity turn, PearlAfricaSat-1 to orbit.</td></tr>
+          <tr><td><a href="orbit.html">Orbit Lab</a></td><td class="t">7</td><td>Newton's cannon, v = √(GM/r), higher-is-slower, a geostationary satellite over Kampala, escape velocity.</td></tr>
+          <tr><td><a href="planets.html">Planet Hopper</a></td><td class="t">7+</td><td>Planet order, gravity jumps (weight vs mass), hammer and feather, Moon and Mars landers (T/W again).</td></tr>
+          <tr><td><a href="code.html">Code Pilot</a></td><td class="t">Codeblocks</td><td>Block-code a drone through courses, then code a quad frame and rocket fins on a TinkerCAD-style workplane.</td></tr>
+          <tr><td><a href="arena.html">Test Arena</a></td><td class="t">all</td><td>Gate Runner (solo) and Quiz Duel (two players, one keyboard). 100+ questions, each with the reason why.</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Setting up the room</h3>
+      <ul>
+        <li>Open <span class="f">index.html</span> in Chrome or Edge, or use the shared link. Laptops are best; tablets work with the on-screen sticks.</li>
+        <li>On the hub, rename <b>Pilot 1</b> and <b>Pilot 2</b> to your students' names. Click a pilot card before they play so stars and XP go to the right person. Progress is saved in that browser only.</li>
+        <li>Turn the sound on (speaker icon). The stall horn, motor hum and "correct" chimes help a lot.</li>
+        <li>With two students and one computer: one flies, the other is "mission control" reading the right-hand panel aloud. Swap every mission.</li>
+      </ul>
+    </section>
+
+    <section id="loop">
+      <h2><span class="no">02</span>The teaching loop (use it for every mission)</h2>
+      <div class="tbl"><table>
+        <thead><tr><th>Step</th><th>Time</th><th>What you do</th></tr></thead>
+        <tbody>
+          <tr><td><b>1 · Play</b></td><td class="t">5–8 min</td><td>Read the mission card together, then let them try. Say nothing about formulas yet. Let them fail once: the failure screen gives a tip.</td></tr>
+          <tr><td><b>2 · Pause &amp; name it</b></td><td class="t">2–3 min</td><td>Freeze on the result screen. Read the green <b>"What you just proved"</b> box aloud. Point at the live number in the right-hand panel that proves it.</td></tr>
+          <tr><td><b>3 · Link to the handout</b></td><td class="t">2 min</td><td>Show the same formula on their handout. Ask them to read one number from the game into it ("lift was 10.8 kN, weight was…?").</td></tr>
+          <tr><td><b>4 · Play again with a target</b></td><td class="t">3–5 min</td><td>Retry for 3 stars. Stars reward doing it better, which means understanding it better.</td></tr>
+          <tr><td><b>5 · Quick check</b></td><td class="t">1 min</td><td>After a win the game asks one question. Let the student answer first, then ask the other student to explain why it's right.</td></tr>
+          <tr><td><b>6 · Logbook</b></td><td class="t">end</td><td>The book icon (top right) keeps every fact they unlocked. At the end, each student copies two facts into the Engineering logbook on their handout.</td></tr>
+        </tbody>
+      </table></div>
+      <div class="say"><b>Say it like this</b>"You just did real engineering. Now let's see what the engineers call it." Name the thing only after they have felt it.</div>
+    </section>
+
+    <section id="saturday">
+      <h2><span class="no">03</span>This Saturday: Week 4, plus catching up Weeks 1–3</h2>
+      <p>You have not shown Weeks 1–3 theory yet. This plan covers the key ideas from Weeks 1–3 through play in the first hour, then spends most of the session on Week 4. It fits the 9:00 am – 1:00 pm slot.</p>
+      <div class="tbl"><table>
+        <thead><tr><th>Time</th><th>Activity</th><th>Game · missions</th><th>Theory they meet</th></tr></thead>
+        <tbody>
+          <tr><td class="t">9:00</td><td>Warm-up duel: no scores count. Shows you what they already know.</td><td><a href="arena.html#w1">Quiz Duel · Week 1</a></td><td>Forces, vectors, aircraft types</td></tr>
+          <tr><td class="t">9:15</td><td>Four forces + take-off at Entebbe</td><td><a href="sky.html">Sky School</a> · missions 1–2</td><td>L = W, T = D; lift equation; take-off speed; thin air at Entebbe</td></tr>
+          <tr><td class="t">9:40</td><td>Stall on purpose (they love this)</td><td>Sky School · mission 3</td><td>Angle of attack, C_L curve, stall at ~14°</td></tr>
+          <tr><td class="t">9:55</td><td>Balance beam + control surfaces</td><td><a href="stability.html">Stability Hangar</a> · missions 1 and 4</td><td>Moments, CG formula, ailerons/elevator/rudder</td></tr>
+          <tr><td class="t">10:15</td><td colspan="3"><b>Break</b></td></tr>
+          <tr><td class="t">10:30</td><td>Motor lab: which motors make it pitch, roll, yaw?</td><td><a href="quad.html">Quad Pilot</a> · mission 1</td><td>Differential thrust, CW/CCW reaction torque</td></tr>
+          <tr><td class="t">10:45</td><td>Hover with manual throttle</td><td>Quad Pilot · mission 2</td><td>Weight = mg, T/W, hover throttle ≈ W ÷ T_max</td></tr>
+          <tr><td class="t">11:00</td><td>Ring run + medicine delivery</td><td>Quad Pilot · missions 3–4</td><td>Thrust vectoring, payload eats T/W margin</td></tr>
+          <tr><td class="t">11:20</td><td>Design review: the handout's engineering challenge</td><td>Quad Pilot · mission 5</td><td>T/W ≥ 2, KV × V, LiPo 3S, flight time = Ah ÷ A × 60</td></tr>
+          <tr><td class="t">11:45</td><td>Codeblocks: code a quad frame, first in the game, then for real in TinkerCAD</td><td><a href="code.html">Code Pilot</a> · level 5, then TinkerCAD (section 6)</td><td>Loops, 360° ÷ 4 = 90°, parametric design</td></tr>
+          <tr><td class="t">12:25</td><td>Test: Gate Runner each, then the Week 4 Quiz Duel</td><td><a href="arena.html#w4">Test Arena · Week 4</a></td><td>Everything from today</td></tr>
+          <tr><td class="t">12:45</td><td>Logbook: two facts each from the in-game logbook; fill the Quick check on the handout</td><td>Logbook (book icon)</td><td>Writing it down</td></tr>
+        </tbody>
+      </table></div>
+      <div class="say warn"><b>Safety moment (Week 4)</b>Before the Quad Pilot missions, say the two rules from the handout: <i>LiPo batteries are charged in a LiPo bag and never left unattended</i>, and <i>propellers are only fitted for supervised tests</i>. The game has no props-off mode; the real lab does.</div>
+    </section>
+
+    <section id="primer">
+      <h2><span class="no">04</span>Theory refresher for you</h2>
+      <p>Short and plain, so you can explain it in your own words. Each part names the game moment that shows it.</p>
+
+      <h3>Forces and the four forces (Week 1)</h3>
+      <p>A force is a <b>vector</b>: it has a size and a direction. On an aircraft there are four: <b>lift</b> at 90° to the airflow, <b>weight</b> straight down (W = m × g), <b>thrust</b> along the engine, <b>drag</b> against the motion. When they balance (L = W and T = D), nothing accelerates, so the aircraft flies steady and level. That is Newton's 1st law. When they don't balance, F = m × a tells you which way it accelerates.</p>
+      <p><i>Game moment:</i> Sky School "Four Forces". Use the <b>Side view</b> camera so the arrows are easy to see. The panel says "L ≈ W · T ≈ D" in green when they have it.</p>
+
+      <h3>The lift equation and stall (Week 2)</h3>
+      <p><span class="f">L = ½ ρ v² S C_L</span>. Air density ρ (thinner at Entebbe, 1.09 instead of 1.225), speed squared (double the speed → four times the lift), wing area S, and the lift coefficient C_L, which grows with angle of attack α, about 0.11 per degree. Past about 14° the air peels off the top of the wing: that is the <b>stall</b>. Lift drops, drag soars. You recover by lowering the nose (less α), not by pulling harder. Take-off speed comes from setting L = W: <span class="f">v = √(2W ÷ ρSC_Lmax)</span> ≈ 28 m/s for the Cessna at Entebbe.</p>
+      <p><i>Game moment:</i> the C_L graph in Sky School puts a pink dot on the curve where the wing is right now. In the Stall Lab they watch it go over the top.</p>
+
+      <h3>Moments, CG and control (Week 3)</h3>
+      <p>A <b>moment</b> is a turning effect: force × distance. Balanced when clockwise = anticlockwise. The <b>CG</b> is the average position of all the mass: <span class="f">x_CG = Σ(m·x) ÷ Σm</span>. For stability the CG must be <b>ahead of the neutral point</b>; the gap is the static margin (aim for 5–15% of chord). Ailerons roll, the elevator pitches, the rudder yaws. Navigation lights: red on the left (port), green on the right (starboard), white on the tail.</p>
+      <p><i>Game moment:</i> the Wind Tunnel graph shows a stable aircraft wobble back to level after a gust, and an unstable one flip over.</p>
+
+      <h3>Propulsion and quadcopters (Week 4)</h3>
+      <p>Propellers and engines push air or gas backwards, so the aircraft is pushed forwards (Newton's 3rd law). A quadcopter has no control surfaces. It steers only by changing motor speeds: <b>all faster = climb; rear faster = pitch forward; left faster = roll right; one diagonal pair faster = yaw</b>. Motors 1 and 3 spin clockwise and 2 and 4 anticlockwise, so their twisting reactions cancel. T/W = total thrust ÷ weight; aim for 2 or more. Motor rpm (no load) = KV × volts; a 3S LiPo is 3 × 3.7 = 11.1 V. Flight time ≈ usable Ah ÷ average A × 60.</p>
+      <p><i>Game moment:</i> the motor panel in Quad Pilot is a top view of the drone. Point at the bars while they fly: "See? Rear motors faster, nose down."</p>
+
+      <h3>Stress and materials (Week 5)</h3>
+      <p>Stress = force ÷ area. Bending makes much bigger stress than pulling: for a rectangular arm <span class="f">σ = 6FL ÷ (b h²)</span>, so thickness h counts twice. Factor of safety = strength ÷ stress; aim for 2 or more for small drones (aircraft use 1.5 on ultimate load). Triangles are rigid, squares are not. Specific strength = strength ÷ density is how engineers compare materials. 3D prints are weakest between layers, so print arms flat.</p>
+
+      <h3>Avionics and PID (Week 6)</h3>
+      <p>Closed loop: sense → think → act, many times a second. A PID controller adds three corrections to the error e: <b>P</b> = Kp × e (push towards the target), <b>D</b> = −Kd × speed (brake before overshooting), <b>I</b> = Ki × the error added up over time (removes steady offsets). Too much P bounces; D calms it; I fixes a heavy battery. GPS turns signal travel time into distance (d = c × t). Three distances fix a position on a map; a fourth satellite corrects the receiver's clock.</p>
+
+      <h3>Rockets and orbits (Week 7)</h3>
+      <p>Rockets carry their own oxidiser, so they work in space. Lift-off needs T/W &gt; 1. The <b>rocket equation</b> <span class="f">Δv = vₑ × ln(m₀ ÷ m_f)</span> has a logarithm, so more fuel gives less and less extra speed. Dropping empty stages beats that. Orbit is falling sideways fast enough: <span class="f">v = √(GM ÷ r)</span> = 7.67 km/s at 400 km (92-minute lap), 3.07 km/s at 35,786 km (one lap per day: geostationary). Launching east from the Equator (Uganda!) gives a free 465 m/s. PearlAfricaSat-1, Uganda's first satellite, was a 1U CubeSat (10 × 10 × ~11 cm) deployed from the ISS in 2023.</p>
+    </section>
+
+    <section id="weeks">
+      <h2><span class="no">05</span>Week by week, with answers</h2>
+      <p>For each week: what to play, what to ask while they play, and the answers to the <b>Quick check</b> and <b>Engineering challenge</b> printed on the handout.</p>
+
+      <div class="week" id="w1">
+        <span class="meta">WEEK 1 · SAT 10 OCT · FOUNDATIONS OF FLIGHT</span>
+        <h3>Forces, vectors and aircraft types</h3>
+        <p class="game-link">Play: <a href="sky.html">Sky School</a> · Four Forces, Land at Entebbe · Test: <a href="arena.html#w1">Week 1</a></p>
+        <div class="grid2">
+          <div>
+            <h4>Ask while they play</h4>
+            <ul><li>"You are climbing. Which arrow is winning: green or orange?"</li><li>"Speed keeps rising. Thrust or drag: which is bigger?"</li><li>"Read me the weight in kN. Where does that number come from?" (1,100 kg × 9.81)</li></ul>
+          </div>
+          <div>
+            <h4>Quick check answers</h4>
+            <ol class="ans"><li>L = W and T = D (equilibrium).</li><li>Perpendicular (90°) to the relative airflow.</li><li>250 ÷ 1.852 ≈ <b>135 knots</b>.</li><li>Dimensions drive the geometry: change a number and the model updates.</li></ol>
+          </div>
+        </div>
+        <h4>Python lab check</h4>
+        <p>Cessna 172 (1,100 kg): weight 10,791 N. 100 km/h = 54 knots = 27.8 m/s. A320 (70,000 kg): 686,700 N. 270 km/h = 145.8 knots = 75 m/s. Reflection: for medicine to an island on Lake Victoria, a <b>hybrid VTOL</b> or <b>multirotor</b> is best, because there is no runway on the island.</p>
+      </div>
+
+      <div class="week" id="w2">
+        <span class="meta">WEEK 2 · SAT 17 OCT · AERODYNAMICS &amp; WING DESIGN</span>
+        <h3>The lift equation, airfoils, stall</h3>
+        <p class="game-link">Play: Sky School · Take-off at Entebbe, Stall Lab · Try the <b>Air: Entebbe / sea level</b> button · Test: <a href="arena.html#w2">Week 2</a></p>
+        <div class="grid2">
+          <div>
+            <h4>Ask while they play</h4>
+            <ul><li>"Switch the air to sea level. Does take-off speed go up or down? Why?"</li><li>"Where is the pink dot on the C_L graph now? What happens past 14°?"</li><li>"In the stall, should you pull up harder? Try it." (It gets worse.)</li></ul>
+          </div>
+          <div>
+            <h4>Quick check answers</h4>
+            <ol class="ans"><li>L = ½ ρ v² S C_L: density, airspeed, wing area, lift coefficient.</li><li>It becomes <b>4 times</b> bigger (v²).</li><li>2% max camber, at 40% chord, 12% max thickness.</li><li>Air is less dense, so more speed is needed for the same lift, so a longer runway.</li></ol>
+          </div>
+        </div>
+        <h4>Python lab check</h4>
+        <p>Sea level: v = √(2 × 10,800 ÷ (1.225 × 16.2 × 1.6)) = √680 ≈ <b>26.1 m/s (94 km/h)</b>. Entebbe (ρ = 1.09): √765 ≈ <b>27.7 m/s (100 km/h)</b>. The game shows 27.6 m/s because it uses W = 1,100 × 9.81 = 10,791 N.</p>
+      </div>
+
+      <div class="week" id="w3">
+        <span class="meta">WEEK 3 · SAT 24 OCT · STABILITY &amp; CONTROL</span>
+        <h3>Moments, CG, control surfaces, nav lights</h3>
+        <p class="game-link">Play: <a href="stability.html">Stability Hangar</a> (all 5) and Sky School · Sky Rings · Test: <a href="arena.html#w3">Week 3</a></p>
+        <div class="grid2">
+          <div>
+            <h4>Ask while they play</h4>
+            <ul><li>"Before you slide the battery, predict where it must go. Use the table."</li><li>"In the wind tunnel, what happens with the CG behind the green NP?"</li><li>"At night you see red on YOUR right and green on YOUR left. Which way is it flying?" (towards you)</li></ul>
+          </div>
+          <div>
+            <h4>Quick check answers</h4>
+            <ol class="ans"><li>In equilibrium, clockwise moments = anticlockwise moments.</li><li>Ailerons.</li><li>The aircraft is unstable in pitch: a disturbance grows.</li><li>Green.</li></ol>
+          </div>
+        </div>
+        <h4>Engineering challenge</h4>
+        <p>CG = (250 × 0 + 180 × 20 + 60 × 70) ÷ 490 = 7,800 ÷ 490 ≈ <b>15.9 mm</b> forward. For CG = 0: 180 × x + 60 × 70 = 0 → x = −4,200 ÷ 180 ≈ <b>−23.3 mm</b> (23 mm behind the centre). This is exactly the "Drone CG" mission. LED resistor: (5 − 2) ÷ 0.015 = 200 Ω → use 220 Ω.</p>
+      </div>
+
+      <div class="week" id="w4">
+        <span class="meta">WEEK 4 · SAT 31 OCT · PROPULSION &amp; MULTIROTORS</span>
+        <h3>Thrust, T/W, KV, LiPo, quadcopter mixing</h3>
+        <p class="game-link">Play: <a href="quad.html">Quad Pilot</a> (all 5) · Test: <a href="arena.html#w4">Week 4</a></p>
+        <div class="grid2">
+          <div>
+            <h4>Ask while they play</h4>
+            <ul><li>"What throttle did you need to hover? How does that compare with 780 ÷ 1,600?"</li><li>"With the medicine box, why does it feel heavy?" (T/W fell from 2.05 to 1.48)</li><li>"In the design review, why can't the 2212 motors go on the 250 frame?" (10-inch props hit each other)</li></ul>
+          </div>
+          <div>
+            <h4>Quick check answers</h4>
+            <ol class="ans"><li>So their reaction torques cancel and the drone does not spin.</li><li>Speed up one diagonal pair and slow the other.</li><li>3 cells in series: 3 × 3.7 = 11.1 V.</li><li>2,000 × 11.1 = <b>22,200 rpm</b>.</li></ol>
+          </div>
+        </div>
+        <h4>Engineering challenge</h4>
+        <p>All-up mass = 450 + 180 + 150 = <b>780 g</b>. Thrust = 4 × 400 = 1,600 g. T/W = 1,600 ÷ 780 ≈ <b>2.05</b>: it just passes, with almost no margin. Two improvements: a lighter or smaller battery, stronger motors/bigger props, a lighter (carbon) frame, or a lighter camera. Worked example from the handout: 600 g drone, 4 × 450 g → T/W 3; 1.2 Ah at 12 A → 6 minutes.</p>
+      </div>
+
+      <div class="week" id="w5">
+        <span class="meta">WEEK 5 · SAT 7 NOV · STRUCTURES, MATERIALS &amp; MANUFACTURING</span>
+        <h3>Stress, factor of safety, trusses, 3D printing</h3>
+        <p class="game-link">Play: <a href="structures.html">Strong &amp; Light</a> · Test: <a href="arena.html#w5">Week 5</a></p>
+        <div class="grid2">
+          <div>
+            <h4>Ask while they play</h4>
+            <ul><li>"The PLA 10 × 4 arm: direct stress is 0.15 MPa but bending stress is 28 MPa. Why so different?"</li><li>"Double the thickness: what happens to stress?" (¼)</li><li>"Why does the balsa block look so big if it weighs the same?"</li></ul>
+          </div>
+          <div>
+            <h4>Quick check answers</h4>
+            <ol class="ans"><li>σ = F ÷ A, in Pa or N/mm² (MPa).</li><li>High strength and stiffness for its low density (specific strength).</li><li>Prints are weakest between layers; flat keeps layers along the arm.</li><li>The roll angle (tilt), from how gravity splits between the y and z axes.</li></ol>
+          </div>
+        </div>
+      </div>
+
+      <div class="week" id="w6">
+        <span class="meta">WEEK 6 · SAT 14 NOV · AVIONICS SYSTEMS &amp; AUTOPILOTS</span>
+        <h3>Instruments, GPS, fly-by-wire, PID</h3>
+        <p class="game-link">Play: <a href="autopilot.html">Autopilot Lab</a> · Test: <a href="arena.html#w6">Week 6</a></p>
+        <div class="grid2">
+          <div>
+            <h4>Ask while they play</h4>
+            <ul><li>"Kp = 2, Kd = 0: describe the graph." (endless bounce)</li><li>"What did Kd do to the bounce?"</li><li>"The heavy battery stops 16 cm low. Which term fixes that?" (I)</li></ul>
+          </div>
+          <div>
+            <h4>Quick check answers</h4>
+            <ol class="ans"><li>Total (pitot) pressure and static pressure.</li><li>Three for position, plus one to correct the receiver's clock error.</li><li>It damps the motion: reacts to rate of change and reduces overshoot.</li><li>The pilot's stick sends requests to computers, which move the control surfaces.</li></ol>
+          </div>
+        </div>
+        <h4>Engineering challenge</h4>
+        <p>Kp = 6, Kd = 3.5 reaches 9.5 m at 1.7 s with 2.4% overshoot, settled in 2.6 s. Kp = 5, Kd = 3 also passes (3.9%). The handout's Kp = 2, Kd = 1.5 overshoots 12.8%, so it fails the 5% target. With the 10% heavier battery, Ki ≈ 1 removes the offset.</p>
+      </div>
+
+      <div class="week" id="w7">
+        <span class="meta">WEEK 7 · SAT 21 NOV · ROCKETS, ORBITS &amp; SPACE SYSTEMS</span>
+        <h3>Atmosphere, rocket equation, orbits, CubeSats</h3>
+        <p class="game-link">Play: <a href="rocket.html">Launch Pad</a>, <a href="orbit.html">Orbit Lab</a>, <a href="planets.html">Planet Hopper</a> · Test: <a href="arena.html#w7">Week 7</a></p>
+        <div class="grid2">
+          <div>
+            <h4>Ask while they play</h4>
+            <ul><li>"You reached space at 100 km. Why aren't you in orbit?" (no sideways speed)</li><li>"Why does the one-stage rocket fail even with the biggest tank?"</li><li>"Which orbit takes longer, 400 km or 20,200 km? Why?"</li></ul>
+          </div>
+          <div>
+            <h4>Quick check answers</h4>
+            <ol class="ans"><li>v = √(GM ÷ r).</li><li>To drop empty tanks and engines; the rocket equation gives diminishing returns.</li><li>10 × 10 × about 11 cm (11.35 cm high).</li><li>Data sent from a vehicle to a ground station.</li></ol>
+          </div>
+        </div>
+        <h4>Engineering challenge and Python</h4>
+        <p>Equator: 40,075 km ÷ 23.93 h ≈ <b>1,675 km/h ≈ 465 m/s</b>. At 60° N: × cos 60° = <b>837 km/h ≈ 233 m/s</b>. Orbits: 400 km → 7.67 km/s, 92 min; 35,786 km → 3.07 km/s, 1,436 min (23.9 h).</p>
+      </div>
+
+      <div class="week" id="w8">
+        <span class="meta">WEEK 8 · SAT 28 NOV · DESIGN REVIEW &amp; SHOWCASE</span>
+        <h3>Present, demonstrate, graduate</h3>
+        <p class="game-link">Play: <a href="arena.html#all">Final exam (all weeks)</a> · Showcase Quiz Duel in front of guests</p>
+        <h4>Quick check answers</h4>
+        <ol class="ans"><li>L = ½ ρ v² S C_L.</li><li>x_CG = Σ(m·x) ÷ Σm.</li><li>The part can carry twice the design load before it fails.</li><li>Proportional, Integral, Derivative.</li></ol>
+        <p>Showcase idea: put the Quiz Duel on a projector. Guests vote on which game each student demonstrates, and the student explains the physics while they fly.</p>
+      </div>
+    </section>
+
+    <section id="codeblocks">
+      <h2><span class="no">06</span>TinkerCAD 3D and Codeblocks tasks</h2>
+      <p>Every 3D model in the games is built only from TinkerCAD basic shapes (box, cylinder, cone, sphere, torus, wedge). After a game, ask them to rebuild that model in TinkerCAD. In <b>Code Pilot</b> they first practise the logic with game blocks, then repeat it in real Codeblocks.</p>
+      <div class="say"><b>Note</b>Block labels below follow TinkerCAD Codeblocks. If your version shows a slightly different label, use the closest block. Sizes are in mm.</div>
+
+      <h3>Codeblocks 1 · Quadcopter frame (Week 4)</h3>
+      <p>The trick: two long crossing bars make four arms with no maths. Then rotate the whole group 45° to turn a "+" frame into the "X" frame from the handout.</p>
+      <div class="blocks">Create variable  ArmLength = 125
+Box        W: 50   L: 50   H: 4            ← centre plate
+Box        W: 2 × ArmLength   L: 10   H: 4  ← arms along X
+Box        W: 10   L: 2 × ArmLength   H: 4  ← arms along Y
+Cylinder   radius 14, height 4 → Move X: ArmLength          ← motor pad
+Cylinder   radius 14, height 4 → Move X: −ArmLength
+Cylinder   radius 14, height 4 → Move Y: ArmLength
+Cylinder   radius 14, height 4 → Move Y: −ArmLength
+Cylinder   radius 3, height 10, set as HOLE → Move X: ArmLength   (repeat for the other 3 pads)
+Create group (all shapes)
+Rotate around Z axis: 45°</div>
+      <p><b>Parametric challenge:</b> change ArmLength from 125 to 110 and run again. The whole frame updates, just like the SolidWorks global variable in the Week 4 handout. <b>Loop challenge:</b> make the four pads with a <i>Repeat 4</i> or <i>Count</i> loop.</p>
+
+      <h3>Codeblocks 2 · Rocket with three fins (Week 7)</h3>
+      <p>Three fins are 360° ÷ 3 = 120° apart. Positions use x = r cos θ and y = r sin θ (polar coordinates, from the Week 4 maths box).</p>
+      <div class="blocks">Cylinder   radius 10, height 100                   ← body
+Cone       radius 10, height 30 → Move Z: 100       ← nose
+Box        W: 15   L: 2   H: 30 → Move X: 17                        ← fin at 0°
+Box        W: 15   L: 2   H: 30 → Rotate Z: 120° → Move X: −8.5  Y: 14.7  ← fin at 120°
+Box        W: 15   L: 2   H: 30 → Rotate Z: 240° → Move X: −8.5  Y: −14.7 ← fin at 240°
+Create group</div>
+      <p>Check: 17 × cos 120° = −8.5 and 17 × sin 120° ≈ 14.7.</p>
+
+      <h3>TinkerCAD 3D · 1U CubeSat like PearlAfricaSat-1 (Week 7)</h3>
+      <div class="blocks">Box 100 × 100 × 113.5 (solid)
+Box  96 ×  96 × 120   (HOLE, centred)  → group: a hollow frame
+Box  80 × 113.5 × 80 (HOLE, centred)  → 80 × 80 windows through two sides
+Box 113.5 × 80 × 80 (HOLE, centred)  → windows through the other two
+4 × Box 8.5 × 8.5 × 113.5 at the corners (rails)
+Group everything. Check: outer size 100 × 100 × 113.5 mm.</div>
+
+      <h3>TinkerCAD 3D · Speed-build aircraft (Week 1)</h3>
+      <p>Fuselage: cylinder turned on its side. Nose: cone or half-sphere. Wing: box 150 mm wide (use the Ruler). Tailplane: smaller box. Fin: <b>wedge</b>. Shortcuts: Duplicate (Ctrl + D), Group (Ctrl + G), Align (L), Mirror (M). Time it, and record the time in the logbook.</p>
+    </section>
+
+    <section id="tests">
+      <h2><span class="no">07</span>Running the tests</h2>
+      <ul>
+        <li><b>Gate Runner</b> (solo): 10 questions, 3 shields. Steer into the gate with the right letter. 9–10 correct = 3 stars. After every gate a pop-up explains the answer, so the test also teaches.</li>
+        <li><b>Quiz Duel</b> (two players): first correct answer scores, faster answers score more, wrong answers cost 50 points and lock you out of that question. Pilot 1 uses <span class="f">A S D F</span>, Pilot 2 uses <span class="f">J K L ;</span>. On a tablet each player gets their own buttons.</li>
+        <li>Choose one week, several weeks, or <b>Select all</b> for the final exam. The test link at the end of each game's last mission opens that week's test.</li>
+        <li>Each pilot earns XP and stars. Show the hub's pilot cards at the end of the day as a scoreboard.</li>
+      </ul>
+      <div class="say"><b>Tip</b>Make the loser of a duel the teacher: they explain one question they got wrong. Explaining is the fastest way to learn.</div>
+    </section>
+
+    <section id="help">
+      <h2><span class="no">08</span>If something goes wrong</h2>
+      <ul>
+        <li><b>Black screen or "3D engine did not load":</b> connect to the internet once, or keep the <span class="f">lib</span> folder next to the pages (it holds a copy of the 3D library for offline use).</li>
+        <li><b>Slow on old laptops:</b> close other tabs. The physics adjusts to slow frame rates, so missions still behave correctly.</li>
+        <li><b>No sound:</b> click anywhere in the game first (browsers only allow sound after a click), and check the speaker icon.</li>
+        <li><b>Keys don't respond:</b> click once on the 3D view so the page has focus.</li>
+        <li><b>Wrong pilot got the stars:</b> pick the right pilot on the hub before playing. To start fresh, use <b>Reset all progress</b> at the bottom of the hub (click twice).</li>
+        <li><b>Stuck on a mission:</b> fail it once: the failure screen gives an engineer's tip. Code Pilot also has a <b>Hint</b> button.</li>
+      </ul>
+    </section>
+  </main>
+</div>
+</body>
+</html>

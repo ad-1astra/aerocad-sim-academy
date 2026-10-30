@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Test Arena</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=B612+Mono&family=Chakra+Petch:wght@500;700&display=swap">
+<link rel="stylesheet" href="css/academy.css">
+<style>
+  .menu .weeks { display: flex; flex-wrap: wrap; gap: 6px; }
+  .menu .weeks button { border-radius: 999px; border: 1px solid var(--line); background: var(--raised); padding: 6px 12px; cursor: pointer; font-size: 0.85rem; }
+  .menu .weeks button.on { border-color: var(--magenta); color: var(--magenta); background: rgba(255, 112, 216, 0.1); }
+  .menu .modes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .menu .modes button { text-align: left; border-radius: 12px; border: 1px solid var(--line); background: var(--raised); padding: 12px 14px; cursor: pointer; display: flex; flex-direction: column; gap: 4px; }
+  .menu .modes button b { font-family: var(--f-display); font-size: 1.1rem; color: var(--cyan); }
+  .menu .modes button span { font-size: 0.85rem; color: var(--dim); }
+  .menu .modes button:hover { border-color: var(--cyan); }
+  .qpanel { position: absolute; z-index: 16; left: 50%; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); width: min(760px, calc(100% - 24px)); padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+  .qpanel .q { font-family: var(--f-display); font-weight: 700; font-size: 1.1rem; }
+  .qpanel .q small { display: block; font-family: var(--f-hud); font-weight: 400; font-size: 0.68rem; letter-spacing: 0.12em; color: var(--magenta); text-transform: uppercase; }
+  .qpanel .ans { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .qpanel .ans div { background: var(--raised); border-radius: 8px; padding: 6px 10px; font-size: 0.9rem; display: flex; gap: 8px; border: 1px solid transparent; min-width: 0; }
+  .qpanel .ans div b { font-family: var(--f-hud); color: var(--amber); flex: none; }
+  .qpanel .ans div.right { border-color: var(--green); background: rgba(75, 227, 138, 0.15); }
+  .qpanel .ans div.wrong { border-color: var(--red); background: rgba(255, 90, 79, 0.15); }
+  .score { position: absolute; z-index: 15; right: max(12px, env(safe-area-inset-right, 0px)); top: calc(64px + env(safe-area-inset-top, 0px)); padding: 10px 14px; min-width: 180px; font-family: var(--f-hud); display: flex; flex-direction: column; gap: 2px; }
+  .score .big { font-family: var(--f-display); font-size: 1.8rem; font-weight: 700; color: var(--fg); }
+  .shields { color: var(--cyan); letter-spacing: 3px; }
+  /* duel */
+  .duel { position: absolute; inset: 0; z-index: 16; display: grid; grid-template-rows: auto 1fr; padding: calc(70px + env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); gap: 14px; pointer-events: none; }
+  .duel > * { pointer-events: auto; }
+  .duel .board { display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: center; }
+  .duel .pl { padding: 10px 14px; border-radius: 12px; display: flex; flex-direction: column; gap: 2px; }
+  .duel .pl .nm { font-family: var(--f-display); font-weight: 700; font-size: 1.2rem; }
+  .duel .pl .pts { font-family: var(--f-hud); font-size: 2rem; }
+  .duel .pl .keys { font-family: var(--f-hud); font-size: 0.72rem; color: var(--dim); }
+  .duel .pl.p1 { border: 2px solid var(--cyan); } .duel .pl.p1 .nm, .duel .pl.p1 .pts { color: var(--cyan); }
+  .duel .pl.p2 { border: 2px solid var(--amber); text-align: right; } .duel .pl.p2 .nm, .duel .pl.p2 .pts { color: var(--amber); }
+  .duel .pl.locked { opacity: 0.4; }
+  .duel .timer { font-family: var(--f-hud); font-size: 1.6rem; text-align: center; color: var(--fg); min-width: 70px; }
+  .duel .center { align-self: center; justify-self: center; width: min(820px, 100%); padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; }
+  .duel .center .q { font-family: var(--f-display); font-weight: 700; font-size: clamp(1.1rem, 2.6vw, 1.6rem); text-wrap: balance; }
+  .duel .center .q small { display: block; font-family: var(--f-hud); font-weight: 400; font-size: 0.7rem; letter-spacing: 0.12em; color: var(--magenta); text-transform: uppercase; margin-bottom: 4px; }
+  .duel .center .ans { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .duel .center .ans div { background: var(--raised); border-radius: 10px; padding: 10px 12px; font-size: 1rem; display: flex; gap: 10px; border: 2px solid transparent; }
+  .duel .center .ans div b { font-family: var(--f-hud); color: var(--dim); flex: none; font-size: 0.8rem; }
+  .duel .center .ans div.right { border-color: var(--green); background: rgba(75, 227, 138, 0.15); }
+  .duel .center .ans div.p1x { border-color: var(--cyan); }
+  .duel .center .ans div.p2x { border-color: var(--amber); }
+  .tpads { display: none; }
+  body.touch .tpads { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .tpads > div { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .tpads button { min-height: 52px; border-radius: 10px; font-family: var(--f-hud); font-size: 1.1rem; background: var(--raised); cursor: pointer; }
+  .tpads .t1 button { border: 2px solid var(--cyan); color: var(--cyan); }
+  .tpads .t2 button { border: 2px solid var(--amber); color: var(--amber); }
+  @media (max-width: 640px) { .qpanel .ans, .duel .center .ans, .menu .modes { grid-template-columns: 1fr; } .score { top: auto; bottom: 200px; } }
+</style>
+</head>
+<body>
+<main class="game"><div id="stage"></div></main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>window.THREE || document.write('<script src="lib/three.min.js"><\/script>')</script>
+<script src="js/core.js"></script>
+<script src="js/models.js"></script>
+<script src="js/questions.js"></script>
+<script src="js/arena.js"></script>
+</body>
+</html>

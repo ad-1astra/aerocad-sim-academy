@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: aerocad-sim-academy
+    runtime: static
+    buildCommand: echo "Static site, nothing to build"
+    staticPublishPath: .
